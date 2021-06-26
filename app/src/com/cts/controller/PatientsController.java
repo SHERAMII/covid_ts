@@ -10,6 +10,7 @@ import com.cts.daoimpl.PatientDaoImpl;
 import com.cts.model.Patient;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.swing.JTable;
 
 /**
  *
@@ -64,6 +65,12 @@ public class PatientsController {
             patient.setPhotoPath(rset.getString("photo"));
         }
         return patient;
+    }
+
+    public static void searchByName(String patientName, JTable tblData) throws SQLException {
+        ResultSet rset = getByOneAttribute("fullname", CommonConstants.sql.LIKE, "%" + patientName + "%");
+        String[] columnList = {"id", "fullname", "address", "age", "mobile"};
+        CommonController.loadDataToTable(tblData, rset, columnList);
     }
 
 }

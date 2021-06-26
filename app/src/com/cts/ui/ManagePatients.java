@@ -211,6 +211,11 @@ public class ManagePatients extends javax.swing.JFrame {
         });
 
         txtSearch.setPrompt("Search Patient");
+        txtSearch.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtSearchKeyTyped(evt);
+            }
+        });
 
         jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/cts/images/searchIcon.png"))); // NOI18N
 
@@ -304,6 +309,14 @@ public class ManagePatients extends javax.swing.JFrame {
     private void txtNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNameActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNameActionPerformed
+
+    private void txtSearchKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyTyped
+        try {
+            PatientsController.searchByName(txtSearch.getText().trim(), tblData);
+        } catch (SQLException ex) {
+            Logger.getLogger(ManagePatients.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_txtSearchKeyTyped
 
     /**
      * @param args the command line arguments
