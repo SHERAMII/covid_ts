@@ -5,6 +5,7 @@
  */
 package com.cts.controller;
 
+import com.cts.core.CommonConstants;
 import com.cts.daoimpl.PatientDaoImpl;
 import com.cts.model.Patient;
 import java.sql.ResultSet;
@@ -48,6 +49,21 @@ public class PatientsController {
 
     public static ResultSet getByOneAttribute(String attribute, String condition, String value) throws SQLException {
         return new PatientDaoImpl().getByOneAttribute(attribute, condition, value);
+    }
+
+    public static Patient getPatientById(int id) throws SQLException {
+        Patient patient = null;
+        ResultSet rset = getByOneAttribute("id", CommonConstants.sql.EQUAL, Integer.toString(id));
+        while (rset.next()) {
+            patient = new Patient();
+            patient.setId(rset.getInt("id"));
+            patient.setAddress(rset.getString("address"));
+            patient.setAge(rset.getInt("age"));
+            patient.setContact(rset.getString("mobile"));
+            patient.setFullName(rset.getString("fullname"));
+            patient.setPhotoPath(rset.getString("photo"));
+        }
+        return patient;
     }
 
 }

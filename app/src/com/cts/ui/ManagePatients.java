@@ -8,17 +8,21 @@ package com.cts.ui;
 import com.cts.controller.CommonController;
 import com.cts.controller.PatientsController;
 import com.cts.core.Validations;
+import com.cts.model.Patient;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author MYPC
  */
 public class ManagePatients extends javax.swing.JFrame {
+
+    int patientId = 0;
 
     /**
      * Creates new form ManagePatients
@@ -38,7 +42,7 @@ public class ManagePatients extends javax.swing.JFrame {
         }
     }
 
-    private void addData() {
+    private void addOrUpdateData() {
 
         if (txtName.getText().trim() == null || txtName.getText().trim().equalsIgnoreCase(null)) {
             JOptionPane.showMessageDialog(this, "Please enter name !", "Warning", JOptionPane.ERROR_MESSAGE);
@@ -61,10 +65,49 @@ public class ManagePatients extends javax.swing.JFrame {
         }
 
         try {
-            PatientsController.addPatient(txtName.getText().trim(), txtAddress.getText().trim(),
-                    Validations.getIntOrZeroFromString(txtAge.getText().trim()), txtContact.getText().trim(), "");
+            if (patientId == 0) {
+                PatientsController.addPatient(txtName.getText().trim(), txtAddress.getText().trim(),
+                        Validations.getIntOrZeroFromString(txtAge.getText().trim()), txtContact.getText().trim(), "");
+            } else if (patientId != 0) {
+                PatientsController.updatePatient(txtName.getText().trim(), txtAddress.getText().trim(),
+                        Validations.getIntOrZeroFromString(txtAge.getText().trim()), txtContact.getText().trim(), "", patientId);
+            }
+
         } catch (SQLException ex) {
             Logger.getLogger(ManagePatients.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        loaddataToTable();
+        clearAll();
+        patientId = 0;
+    }
+
+    private void setEditdata() {
+        DefaultTableModel dtm = (DefaultTableModel) tblData.getModel();
+        int selectedRaw = tblData.getSelectedRow();
+        if (selectedRaw != -1) {
+            try {
+                patientId = Validations.getIntOrZeroFromString(dtm.getValueAt(selectedRaw, 0).toString());
+                Patient patient = PatientsController.getPatientById(patientId);
+                txtAddress.setText(patient.getAddress());
+                txtAge.setText(Integer.toString(patient.getAge()));
+                txtContact.setText(patient.getContact());
+                txtName.setText(patient.getFullName());
+            } catch (SQLException ex) {
+                Logger.getLogger(ManagePatients.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    private void delete() {
+        DefaultTableModel dtm = (DefaultTableModel) tblData.getModel();
+        int selectedRaw = tblData.getSelectedRow();
+        if (selectedRaw != -1) {
+            try {
+                int patientId = Validations.getIntOrZeroFromString(dtm.getValueAt(selectedRaw, 0).toString());
+                PatientsController.deletePatient(patientId);
+            } catch (SQLException ex) {
+                Logger.getLogger(ManagePatients.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
@@ -133,6 +176,11 @@ public class ManagePatients extends javax.swing.JFrame {
 
         txtName.setToolTipText("Patient Name");
         txtName.setPrompt("Patient Name");
+        txtName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtNameActionPerformed(evt);
+            }
+        });
 
         txtAddress.setPrompt("Patient Address");
 
@@ -149,8 +197,18 @@ public class ManagePatients extends javax.swing.JFrame {
         });
 
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/cts/images/editIcon.png"))); // NOI18N
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/cts/images/deleteIcon.png"))); // NOI18N
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         txtSearch.setPrompt("Search Patient");
 
@@ -229,10 +287,23 @@ public class ManagePatients extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        addData();
+        addOrUpdateData();
         loaddataToTable();
         clearAll();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        delete();
+        loaddataToTable();
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        setEditdata();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void txtNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNameActionPerformed
 
     /**
      * @param args the command line arguments

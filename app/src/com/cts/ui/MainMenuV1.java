@@ -131,11 +131,11 @@ public class MainMenuV1 extends javax.swing.JFrame {
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
+            .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 159, Short.MAX_VALUE)
+            .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
@@ -151,11 +151,11 @@ public class MainMenuV1 extends javax.swing.JFrame {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(22, Short.MAX_VALUE))
         );
 
-        jPanel1.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 247, -1, -1));
+        jPanel1.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 247, 190, 190));
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
@@ -210,7 +210,7 @@ public class MainMenuV1 extends javax.swing.JFrame {
         jPanel1.add(lblTimeYear, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 90, 400, 100));
 
         lblTimeMonth.setFont(new java.awt.Font("Tahoma", 1, 48)); // NOI18N
-        jPanel1.add(lblTimeMonth, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 190, 300, 80));
+        jPanel1.add(lblTimeMonth, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 190, 300, 90));
 
         lblTimeDay.setFont(new java.awt.Font("Tahoma", 1, 48)); // NOI18N
         jPanel1.add(lblTimeDay, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 190, 100, 80));
