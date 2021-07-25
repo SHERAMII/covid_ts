@@ -17,10 +17,6 @@ public class Login extends javax.swing.JFrame {
      */
     public Login() {
         initComponents();
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-        LocalDateTime now = LocalDateTime.now();
-        lblTimeDay.setText(Integer.toString(now.getDayOfMonth()));
-        lblTimeMonth.setText(now.getMonth().toString());
     }
 
     private void login() {
@@ -29,7 +25,7 @@ public class Login extends javax.swing.JFrame {
 
         if (uname.equalsIgnoreCase("Admin") && pw.equalsIgnoreCase("123")) {
             new MainMenuV1().setVisible(true);
-        }else{
+        } else {
             JOptionPane.showMessageDialog(this, "Incorrect username or password !", "Warning", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -50,16 +46,15 @@ public class Login extends javax.swing.JFrame {
         lblLogin = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
         txtPwField = new javax.swing.JPasswordField();
-        lblTimeDay = new javax.swing.JLabel();
-        lblTimeMonth = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Login ");
-        setMinimumSize(new java.awt.Dimension(570, 412));
+        setMaximumSize(new java.awt.Dimension(364, 498));
+        setMinimumSize(new java.awt.Dimension(364, 498));
         setResizable(false);
 
-        panel.setBackground(new java.awt.Color(0, 102, 102));
+        panel.setBackground(new java.awt.Color(0, 204, 204));
         panel.setFont(new java.awt.Font("Ubuntu", 0, 11)); // NOI18N
         panel.setMaximumSize(new java.awt.Dimension(325, 412));
         panel.setMinimumSize(new java.awt.Dimension(325, 412));
@@ -136,24 +131,14 @@ public class Login extends javax.swing.JFrame {
                 .addComponent(txtPwField, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(44, 44, 44)
                 .addComponent(lblLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(179, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        panel.add(panelLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, 300, 450));
+        panel.add(panelLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, 300, 280));
 
-        lblTimeDay.setFont(new java.awt.Font("Arial Black", 0, 48)); // NOI18N
-        lblTimeDay.setForeground(new java.awt.Color(0, 0, 102));
-        lblTimeDay.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lblTimeDay.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        panel.add(lblTimeDay, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 330, 70, 60));
-
-        lblTimeMonth.setFont(new java.awt.Font("Arial Black", 0, 24)); // NOI18N
-        lblTimeMonth.setForeground(new java.awt.Color(0, 0, 102));
-        lblTimeMonth.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        panel.add(lblTimeMonth, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 330, 190, 60));
-
+        jLabel2.setBackground(new java.awt.Color(0, 204, 204));
         jLabel2.setToolTipText("");
-        panel.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 360, 500));
+        panel.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 360, 400));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -233,8 +218,6 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel lblLogin;
-    private javax.swing.JLabel lblTimeDay;
-    private javax.swing.JLabel lblTimeMonth;
     private javax.swing.JPanel panel;
     private javax.swing.JPanel panelLogin;
     private javax.swing.JPasswordField txtPwField;
