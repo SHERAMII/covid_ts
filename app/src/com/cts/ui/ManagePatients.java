@@ -144,7 +144,7 @@ public class ManagePatients extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Manage Patients");
 
-        jPanel1.setBackground(new java.awt.Color(0, 153, 153));
+        jPanel1.setBackground(new java.awt.Color(0, 204, 204));
 
         tblData.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {

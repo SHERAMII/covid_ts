@@ -57,15 +57,17 @@ public class MainMenuV1 extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Covid Patient Management & Tracking System");
 
-        jPanel1.setBackground(new java.awt.Color(204, 204, 204));
+        jPanel1.setBackground(new java.awt.Color(0, 204, 204));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/cts/images/uhLogo.png"))); // NOI18N
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/cts/images/SltLogo.png"))); // NOI18N
 
         jPanel2.setBackground(new java.awt.Color(51, 153, 255));
+        jPanel2.setOpaque(false);
 
         jPanel3.setBackground(new java.awt.Color(0, 0, 153));
+        jPanel3.setOpaque(false);
 
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/cts/images/user_management_128x128.png"))); // NOI18N
@@ -115,8 +117,10 @@ public class MainMenuV1 extends javax.swing.JFrame {
         jLabel3.setText("MANAGE PATIENTS");
 
         jPanel4.setBackground(new java.awt.Color(51, 153, 255));
+        jPanel4.setOpaque(false);
 
         jPanel5.setBackground(new java.awt.Color(0, 0, 153));
+        jPanel5.setOpaque(false);
 
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/cts/images/room_128x128.png"))); // NOI18N
@@ -166,11 +170,13 @@ public class MainMenuV1 extends javax.swing.JFrame {
         jLabel4.setText("MANAGE OFFICERS");
 
         jPanel6.setBackground(new java.awt.Color(51, 153, 255));
+        jPanel6.setOpaque(false);
 
         jPanel7.setBackground(new java.awt.Color(0, 0, 153));
 
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/cts/images/lecturer_128x128.png"))); // NOI18N
+        jLabel8.setOpaque(true);
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
