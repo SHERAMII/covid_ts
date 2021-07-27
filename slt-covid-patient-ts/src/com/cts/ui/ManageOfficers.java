@@ -142,7 +142,7 @@ public class ManageOfficers extends javax.swing.JFrame {
         jButton4 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Manage Patients");
+        setTitle("Manage Officers");
 
         jPanel1.setBackground(new java.awt.Color(0, 204, 204));
 
