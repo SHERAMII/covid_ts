@@ -44,7 +44,7 @@ public class ManageOfficers extends javax.swing.JFrame {
 
     private void addOrUpdateData() {
 
-        if (txtName.getText().trim() == null || txtName.getText().trim().equalsIgnoreCase(null)) {
+        if (txtCenterName.getText().trim() == null || txtCenterName.getText().trim().equalsIgnoreCase(null)) {
             JOptionPane.showMessageDialog(this, "Please enter name !", "Warning", JOptionPane.ERROR_MESSAGE);
             return;
         }
@@ -66,10 +66,10 @@ public class ManageOfficers extends javax.swing.JFrame {
 
         try {
             if (patientId == 0) {
-                PatientsController.addPatient(txtName.getText().trim(), txtAddress.getText().trim(),
+                PatientsController.addPatient(txtCenterName.getText().trim(), txtAddress.getText().trim(),
                         Validations.getIntOrZeroFromString(txtAge.getText().trim()), txtContact.getText().trim(), "");
             } else if (patientId != 0) {
-                PatientsController.updatePatient(txtName.getText().trim(), txtAddress.getText().trim(),
+                PatientsController.updatePatient(txtCenterName.getText().trim(), txtAddress.getText().trim(),
                         Validations.getIntOrZeroFromString(txtAge.getText().trim()), txtContact.getText().trim(), "", patientId);
             }
 
@@ -91,7 +91,7 @@ public class ManageOfficers extends javax.swing.JFrame {
                 txtAddress.setText(patient.getAddress());
                 txtAge.setText(Integer.toString(patient.getAge()));
                 txtContact.setText(patient.getContact());
-                txtName.setText(patient.getFullName());
+                txtCenterName.setText(patient.getFullName());
             } catch (SQLException ex) {
                 Logger.getLogger(ManageOfficers.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -114,7 +114,7 @@ public class ManageOfficers extends javax.swing.JFrame {
     private void clearAll() {
         txtAddress.setText("");
         txtAge.setText("");
-        txtName.setText("");
+        txtCenterName.setText("");
         txtContact.setText("");
         txtSearch.setText("");
     }
@@ -131,7 +131,6 @@ public class ManageOfficers extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblData = new javax.swing.JTable();
-        txtName = new org.jdesktop.swingx.JXTextField();
         txtAddress = new org.jdesktop.swingx.JXTextField();
         txtAge = new org.jdesktop.swingx.JXTextField();
         txtContact = new org.jdesktop.swingx.JXTextField();
@@ -140,6 +139,7 @@ public class ManageOfficers extends javax.swing.JFrame {
         jButton3 = new javax.swing.JButton();
         txtSearch = new org.jdesktop.swingx.JXTextField();
         jButton4 = new javax.swing.JButton();
+        comboCenterName = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Manage Officers");
@@ -151,11 +151,11 @@ public class ManageOfficers extends javax.swing.JFrame {
 
             },
             new String [] {
-                "id", "Patient Name", "Address", "Age", "Contact"
+                "id", "Center Name", "User Name", "Email", "Contact", "Address", "Password"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                true, false, false, false, false
+                true, false, false, false, false, true, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -167,20 +167,22 @@ public class ManageOfficers extends javax.swing.JFrame {
             tblData.getColumnModel().getColumn(0).setMinWidth(0);
             tblData.getColumnModel().getColumn(0).setPreferredWidth(0);
             tblData.getColumnModel().getColumn(0).setMaxWidth(0);
-            tblData.getColumnModel().getColumn(1).setMinWidth(250);
-            tblData.getColumnModel().getColumn(1).setPreferredWidth(250);
-            tblData.getColumnModel().getColumn(1).setMaxWidth(250);
-            tblData.getColumnModel().getColumn(3).setResizable(false);
-            tblData.getColumnModel().getColumn(4).setResizable(false);
+            tblData.getColumnModel().getColumn(1).setMinWidth(150);
+            tblData.getColumnModel().getColumn(1).setPreferredWidth(150);
+            tblData.getColumnModel().getColumn(1).setMaxWidth(150);
+            tblData.getColumnModel().getColumn(2).setMinWidth(150);
+            tblData.getColumnModel().getColumn(2).setPreferredWidth(150);
+            tblData.getColumnModel().getColumn(2).setMaxWidth(150);
+            tblData.getColumnModel().getColumn(3).setMinWidth(150);
+            tblData.getColumnModel().getColumn(3).setPreferredWidth(150);
+            tblData.getColumnModel().getColumn(3).setMaxWidth(150);
+            tblData.getColumnModel().getColumn(4).setMinWidth(150);
+            tblData.getColumnModel().getColumn(4).setPreferredWidth(150);
+            tblData.getColumnModel().getColumn(4).setMaxWidth(150);
+            tblData.getColumnModel().getColumn(6).setMinWidth(0);
+            tblData.getColumnModel().getColumn(6).setPreferredWidth(0);
+            tblData.getColumnModel().getColumn(6).setMaxWidth(0);
         }
-
-        txtName.setToolTipText("Patient Name");
-        txtName.setPrompt("Patient Name");
-        txtName.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtNameActionPerformed(evt);
-            }
-        });
 
         txtAddress.setPrompt("Patient Address");
 
@@ -210,7 +212,8 @@ public class ManageOfficers extends javax.swing.JFrame {
             }
         });
 
-        txtSearch.setPrompt("Search Patient");
+        txtSearch.setToolTipText("Search Officer");
+        txtSearch.setPrompt("Search Officer");
         txtSearch.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtSearchKeyTyped(evt);
@@ -219,18 +222,20 @@ public class ManageOfficers extends javax.swing.JFrame {
 
         jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/cts/images/searchIcon.png"))); // NOI18N
 
+        comboCenterName.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtAge, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtContact, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(txtAddress, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
+                    .addComponent(txtAge, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
+                    .addComponent(txtContact, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(comboCenterName, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -261,7 +266,7 @@ public class ManageOfficers extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(comboCenterName, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(txtAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
@@ -305,10 +310,6 @@ public class ManageOfficers extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         setEditdata();
     }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void txtNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNameActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtNameActionPerformed
 
     private void txtSearchKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyTyped
         try {
@@ -355,6 +356,7 @@ public class ManageOfficers extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> comboCenterName;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -365,7 +367,6 @@ public class ManageOfficers extends javax.swing.JFrame {
     private org.jdesktop.swingx.JXTextField txtAddress;
     private org.jdesktop.swingx.JXTextField txtAge;
     private org.jdesktop.swingx.JXTextField txtContact;
-    private org.jdesktop.swingx.JXTextField txtName;
     private org.jdesktop.swingx.JXTextField txtSearch;
     // End of variables declaration//GEN-END:variables
 }
