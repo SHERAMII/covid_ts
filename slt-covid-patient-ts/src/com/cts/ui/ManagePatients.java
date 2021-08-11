@@ -8,6 +8,7 @@ package com.cts.ui;
 import com.cts.controller.CommonController;
 import com.cts.controller.PatientsController;
 import com.cts.core.Validations;
+import com.cts.daoimpl.CenterDaoImpl;
 import com.cts.model.Patient;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -30,12 +31,22 @@ public class ManagePatients extends javax.swing.JFrame {
     public ManagePatients() {
         initComponents();
         loaddataToTable();
+        loadCentersToCombo();
+    }
+
+    private void loadCentersToCombo() {
+        try {
+            ResultSet rset = new CenterDaoImpl().getAll();
+            CommonController.loadDataToComboBox(comboCenterName, rset, "centre_location");
+        } catch (SQLException ex) {
+            Logger.getLogger(ManagePatients.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private void loaddataToTable() {
         try {
             ResultSet rset = PatientsController.getAll();
-            String[] columnList = {"id", "fullname", "address", "age", "mobile"};
+            String[] columnList = {"id", "fullname", "address", "age", "mobile", "center_name"};
             CommonController.loadDataToTable(tblData, rset, columnList);
         } catch (SQLException ex) {
             Logger.getLogger(ManagePatients.class.getName()).log(Level.SEVERE, null, ex);
@@ -67,10 +78,12 @@ public class ManagePatients extends javax.swing.JFrame {
         try {
             if (patientId == 0) {
                 PatientsController.addPatient(txtName.getText().trim(), txtAddress.getText().trim(),
-                        Validations.getIntOrZeroFromString(txtAge.getText().trim()), txtContact.getText().trim(), "");
+                        Validations.getIntOrZeroFromString(txtAge.getText().trim()),
+                        txtContact.getText().trim(), "", comboCenterName.getSelectedItem().toString());
             } else if (patientId != 0) {
                 PatientsController.updatePatient(txtName.getText().trim(), txtAddress.getText().trim(),
-                        Validations.getIntOrZeroFromString(txtAge.getText().trim()), txtContact.getText().trim(), "", patientId);
+                        Validations.getIntOrZeroFromString(txtAge.getText().trim()),
+                        txtContact.getText().trim(), "", patientId, comboCenterName.getSelectedItem().toString());
             }
 
         } catch (SQLException ex) {
@@ -92,6 +105,7 @@ public class ManagePatients extends javax.swing.JFrame {
                 txtAge.setText(Integer.toString(patient.getAge()));
                 txtContact.setText(patient.getContact());
                 txtName.setText(patient.getFullName());
+                comboCenterName.setSelectedItem(patient.getCenterName());
             } catch (SQLException ex) {
                 Logger.getLogger(ManagePatients.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -140,6 +154,8 @@ public class ManagePatients extends javax.swing.JFrame {
         jButton3 = new javax.swing.JButton();
         txtSearch = new org.jdesktop.swingx.JXTextField();
         jButton4 = new javax.swing.JButton();
+        comboCenterName = new javax.swing.JComboBox<>();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Manage Patients");
@@ -151,11 +167,11 @@ public class ManagePatients extends javax.swing.JFrame {
 
             },
             new String [] {
-                "id", "Patient Name", "Address", "Age", "Contact"
+                "id", "Patient Name", "Address", "Age", "Contact", "Center"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                true, false, false, false, false
+                true, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -172,6 +188,7 @@ public class ManagePatients extends javax.swing.JFrame {
             tblData.getColumnModel().getColumn(1).setMaxWidth(250);
             tblData.getColumnModel().getColumn(3).setResizable(false);
             tblData.getColumnModel().getColumn(4).setResizable(false);
+            tblData.getColumnModel().getColumn(5).setResizable(false);
         }
 
         txtName.setToolTipText("Patient Name");
@@ -219,6 +236,11 @@ public class ManagePatients extends javax.swing.JFrame {
 
         jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/cts/images/searchIcon.png"))); // NOI18N
 
+        comboCenterName.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel1.setText("Covid Center");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -226,22 +248,26 @@ public class ManagePatients extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtAge, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtContact, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtAge, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtContact, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(comboCenterName, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 471, Short.MAX_VALUE)
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 846, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1))
                 .addGap(31, 31, 31))
         );
         jPanel1Layout.setVerticalGroup(
@@ -260,7 +286,12 @@ public class ManagePatients extends javax.swing.JFrame {
                             .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 551, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(comboCenterName, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
                         .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(txtAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -269,8 +300,8 @@ public class ManagePatients extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(txtContact, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 551, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(153, 153, 153)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -354,10 +385,12 @@ public class ManagePatients extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> comboCenterName;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblData;

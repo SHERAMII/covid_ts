@@ -19,17 +19,20 @@ import javax.swing.JTable;
 public class PatientsController {
 //
 
-    public static boolean addPatient(String fullName, String address, int age, String contact, String photopath) throws SQLException {
+    public static boolean addPatient(String fullName, String address, int age,
+            String contact, String photopath, String centerName) throws SQLException {
         Patient patient = new Patient();
         patient.setAddress(address);
         patient.setAge(age);
         patient.setContact(contact);
         patient.setFullName(fullName);
         patient.setPhotoPath(photopath);
+        patient.setCenterName(centerName);
         return new PatientDaoImpl().addPatient(patient);
     }
 
-    public static boolean updatePatient(String fullName, String address, int age, String contact, String photopath, int id) throws SQLException {
+    public static boolean updatePatient(String fullName, String address, int age,
+            String contact, String photopath, int id, String centerName) throws SQLException {
         Patient patient = new Patient();
         patient.setAddress(address);
         patient.setAge(age);
@@ -37,6 +40,7 @@ public class PatientsController {
         patient.setFullName(fullName);
         patient.setPhotoPath(photopath);
         patient.setId(id);
+        patient.setCenterName(centerName);
         return new PatientDaoImpl().updatePatient(patient);
     }
 

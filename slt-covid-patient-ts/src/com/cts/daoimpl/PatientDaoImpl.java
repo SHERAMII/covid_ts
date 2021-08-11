@@ -19,18 +19,19 @@ import java.sql.SQLException;
  */
 public class PatientDaoImpl implements PatientDao {
 
-    private String selectQuery = "select id, fullname, address, age, mobile, photo from patients";
+    private String selectQuery = "select id, fullname, address, age, mobile, photo, center_name from patients";
 
     @Override
     public boolean addPatient(Patient patient) throws SQLException {
         Connection con = DatabaseConnection.getDatabaseConnection();
         PreparedStatement ps = con.prepareStatement("insert into patients "
-                + "(fullname, address, age, mobile, photo) values (?,?,?,?,?)");
+                + "(fullname, address, age, mobile, photo, center_name) values (?,?,?,?,?,?)");
         ps.setString(1, patient.getFullName());
         ps.setString(2, patient.getAddress());
         ps.setInt(3, patient.getAge());
         ps.setString(4, patient.getContact());
         ps.setString(5, patient.getPhotoPath());
+        ps.setString(6, patient.getCenterName());
         ps.executeUpdate();
         ps.close();
         return true;
@@ -40,13 +41,14 @@ public class PatientDaoImpl implements PatientDao {
     public boolean updatePatient(Patient patient) throws SQLException {
         Connection con = DatabaseConnection.getDatabaseConnection();
         PreparedStatement ps = con.prepareStatement("update patients set fullname=?, address=?, "
-                + "age=?, mobile=?, photo=? where id=?");
+                + "age=?, mobile=?, photo=?, center_name=? where id=?");
         ps.setString(1, patient.getFullName());
         ps.setString(2, patient.getAddress());
         ps.setInt(3, patient.getAge());
         ps.setString(4, patient.getContact());
         ps.setString(5, patient.getPhotoPath());
-        ps.setInt(6, patient.getId());
+        ps.setString(6, patient.getCenterName());
+        ps.setInt(7, patient.getId());
         ps.executeUpdate();
         ps.close();
         return true;
@@ -68,7 +70,7 @@ public class PatientDaoImpl implements PatientDao {
 
     @Override
     public ResultSet getByOneAttribute(String attribute, String condition, String value) throws SQLException {
-      return new CommonDaoImpl().getResultByAttribute(selectQuery, attribute, condition, value);
+        return new CommonDaoImpl().getResultByAttribute(selectQuery, attribute, condition, value);
     }
 
 }

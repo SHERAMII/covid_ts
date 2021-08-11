@@ -19,6 +19,8 @@ public class Patient {
     private int age;
     private String contact;
     private String photoPath;
+    private String centerName;
+    
 
     /**
      * @return the id
@@ -102,6 +104,20 @@ public class Patient {
      */
     public void setPhotoPath(String photoPath) {
         this.photoPath = photoPath;
+    }
+
+    /**
+     * @return the centerName
+     */
+    public String getCenterName() {
+        return centerName;
+    }
+
+    /**
+     * @param centerName the centerName to set
+     */
+    public void setCenterName(String centerName) {
+        this.centerName = centerName;
     }
     
     
