@@ -6,9 +6,11 @@
 package com.cts.ui;
 
 import com.cts.controller.CommonController;
+import com.cts.controller.OfficerController;
 import com.cts.controller.PatientsController;
 import com.cts.core.Validations;
-import com.cts.model.Patient;
+import com.cts.daoimpl.CenterDaoImpl;
+import com.cts.model.Officer;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -22,30 +24,58 @@ import javax.swing.table.DefaultTableModel;
  */
 public class ManageOfficers extends javax.swing.JFrame {
 
-    int patientId = 0;
+    int officerId = 0;
 
     /**
      * Creates new form ManagePatients
      */
     public ManageOfficers() {
         initComponents();
-        loaddataToTable();
+        loadDataToTable();
+        loadCentersToCombo();
     }
 
-    private void loaddataToTable() {
+    private void loadCentersToCombo() {
         try {
-            ResultSet rset = PatientsController.getAll();
-            String[] columnList = {"id", "fullname", "address", "age", "mobile"};
-            CommonController.loadDataToTable(tblData, rset, columnList);
+            ResultSet rset = new CenterDaoImpl().getAll();
+            CommonController.loadDataToComboBox(comboCenterName, rset, "centre_location");
         } catch (SQLException ex) {
             Logger.getLogger(ManageOfficers.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
+    private void loadDataToTable() {
+        try {
+            ResultSet rset = OfficerController.getAll();
+            String[] columnList = {"id", "username", "centre", "email", "address", "mobile", "password"};
+            CommonController.loadDataToTable(tblData, rset, columnList);
+        } catch (SQLException ex) {
+            Logger.getLogger(ManageOfficers.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+//    private void loadDataToTable() {
+//        try {
+//            ResultSet rset = new CenterDaoImpl().getAll();
+//            String[] columnList = {"id", "centre_location", "latitude", "longitude"};
+//            CommonController.loadDataToTable(tblData, rset, columnList);
+//        } catch (SQLException ex) {
+//            Logger.getLogger(ManageOfficers.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//    }
+
     private void addOrUpdateData() {
 
-        if (txtCenterName.getText().trim() == null || txtCenterName.getText().trim().equalsIgnoreCase(null)) {
-            JOptionPane.showMessageDialog(this, "Please enter name !", "Warning", JOptionPane.ERROR_MESSAGE);
+        if (txtOfficerName.getText().trim() == null || txtOfficerName.getText().trim().equalsIgnoreCase(null)) {
+            JOptionPane.showMessageDialog(this, "Please enter officer name !", "Warning", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (txtEmail.getText().trim() == null || txtEmail.getText().trim().equalsIgnoreCase(null)) {
+            JOptionPane.showMessageDialog(this, "Please enter email !", "Warning", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (txtMobileNo.getText().trim() == null || txtMobileNo.getText().trim().equalsIgnoreCase(null)) {
+            JOptionPane.showMessageDialog(this, "Please enter mobile number !", "Warning", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
@@ -54,31 +84,29 @@ public class ManageOfficers extends javax.swing.JFrame {
             return;
         }
 
-        if (txtAge.getText().trim() == null || txtAge.getText().trim().equalsIgnoreCase(null)) {
-            JOptionPane.showMessageDialog(this, "Please enter age !", "Warning", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        if (txtContact.getText().trim() == null || txtContact.getText().trim().equalsIgnoreCase(null)) {
-            JOptionPane.showMessageDialog(this, "Please enter contact no. !", "Warning", JOptionPane.ERROR_MESSAGE);
+        if (txtPassword.getText().trim() == null || txtPassword.getText().trim().equalsIgnoreCase(null)) {
+            JOptionPane.showMessageDialog(this, "Please enter password !", "Warning", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         try {
-            if (patientId == 0) {
-                PatientsController.addPatient(txtCenterName.getText().trim(), txtAddress.getText().trim(),
-                        Validations.getIntOrZeroFromString(txtAge.getText().trim()), txtContact.getText().trim(), "");
-            } else if (patientId != 0) {
-                PatientsController.updatePatient(txtCenterName.getText().trim(), txtAddress.getText().trim(),
-                        Validations.getIntOrZeroFromString(txtAge.getText().trim()), txtContact.getText().trim(), "", patientId);
+            if (officerId == 0) {
+                OfficerController.add(txtOfficerName.getText().trim(), txtAddress.getText().trim(),
+                        comboCenterName.getSelectedItem().toString(), txtEmail.getText().trim(),
+                        txtMobileNo.getText().trim(), txtPassword.getText().trim());
+
+            } else if (officerId != 0) {
+                OfficerController.update(txtOfficerName.getText().trim(), txtAddress.getText().trim(),
+                        comboCenterName.getSelectedItem().toString(), txtEmail.getText().trim(),
+                        txtMobileNo.getText().trim(), txtPassword.getText().trim(), officerId);
             }
 
         } catch (SQLException ex) {
             Logger.getLogger(ManageOfficers.class.getName()).log(Level.SEVERE, null, ex);
         }
-        loaddataToTable();
+        loadDataToTable();
         clearAll();
-        patientId = 0;
+        officerId = 0;
     }
 
     private void setEditdata() {
@@ -86,12 +114,14 @@ public class ManageOfficers extends javax.swing.JFrame {
         int selectedRaw = tblData.getSelectedRow();
         if (selectedRaw != -1) {
             try {
-                patientId = Validations.getIntOrZeroFromString(dtm.getValueAt(selectedRaw, 0).toString());
-                Patient patient = PatientsController.getPatientById(patientId);
-                txtAddress.setText(patient.getAddress());
-                txtAge.setText(Integer.toString(patient.getAge()));
-                txtContact.setText(patient.getContact());
-                txtCenterName.setText(patient.getFullName());
+                officerId = Validations.getIntOrZeroFromString(dtm.getValueAt(selectedRaw, 0).toString());
+                Officer officer = OfficerController.getOfficerById(officerId);
+                comboCenterName.setSelectedItem(officer.getCenter());
+                txtOfficerName.setText(officer.getName());
+                txtEmail.setText(officer.getEmail());
+                txtAddress.setText(officer.getAddress());
+                txtPassword.setText(officer.getPassword());
+                txtMobileNo.setText(officer.getMobile());
             } catch (SQLException ex) {
                 Logger.getLogger(ManageOfficers.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -103,8 +133,8 @@ public class ManageOfficers extends javax.swing.JFrame {
         int selectedRaw = tblData.getSelectedRow();
         if (selectedRaw != -1) {
             try {
-                int patientId = Validations.getIntOrZeroFromString(dtm.getValueAt(selectedRaw, 0).toString());
-                PatientsController.deletePatient(patientId);
+                int offId = Validations.getIntOrZeroFromString(dtm.getValueAt(selectedRaw, 0).toString());
+                OfficerController.delete(offId);
             } catch (SQLException ex) {
                 Logger.getLogger(ManageOfficers.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -112,11 +142,11 @@ public class ManageOfficers extends javax.swing.JFrame {
     }
 
     private void clearAll() {
+        txtOfficerName.setText("");
         txtAddress.setText("");
-        txtAge.setText("");
-        txtCenterName.setText("");
-        txtContact.setText("");
-        txtSearch.setText("");
+        txtPassword.setText("");
+        txtMobileNo.setText("");
+        txtEmail.setText("");
     }
 
     /**
@@ -131,15 +161,16 @@ public class ManageOfficers extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblData = new javax.swing.JTable();
+        txtOfficerName = new org.jdesktop.swingx.JXTextField();
         txtAddress = new org.jdesktop.swingx.JXTextField();
-        txtAge = new org.jdesktop.swingx.JXTextField();
-        txtContact = new org.jdesktop.swingx.JXTextField();
+        txtPassword = new org.jdesktop.swingx.JXTextField();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
-        txtSearch = new org.jdesktop.swingx.JXTextField();
-        jButton4 = new javax.swing.JButton();
         comboCenterName = new javax.swing.JComboBox<>();
+        txtEmail = new org.jdesktop.swingx.JXTextField();
+        txtMobileNo = new org.jdesktop.swingx.JXTextField();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Manage Officers");
@@ -184,14 +215,15 @@ public class ManageOfficers extends javax.swing.JFrame {
             tblData.getColumnModel().getColumn(6).setMaxWidth(0);
         }
 
-        txtAddress.setPrompt("Patient Address");
+        txtOfficerName.setPrompt("Officer Name");
 
-        txtAge.setPrompt("Age (Years)");
+        txtAddress.setName("Address"); // NOI18N
+        txtAddress.setPrompt("Address");
 
-        txtContact.setToolTipText("Contact");
-        txtContact.setPrompt("Contact");
+        txtPassword.setPrompt("Password");
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/cts/images/saveIcon.png"))); // NOI18N
+        jButton1.setToolTipText("Save");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -212,17 +244,15 @@ public class ManageOfficers extends javax.swing.JFrame {
             }
         });
 
-        txtSearch.setToolTipText("Search Officer");
-        txtSearch.setPrompt("Search Officer");
-        txtSearch.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtSearchKeyTyped(evt);
-            }
-        });
-
-        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/cts/images/searchIcon.png"))); // NOI18N
-
         comboCenterName.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+
+        txtEmail.setToolTipText("Email");
+        txtEmail.setPrompt("Email");
+
+        txtMobileNo.setPrompt("Mobile No");
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel1.setText("Covid Center");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -230,23 +260,28 @@ public class ManageOfficers extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(txtAddress, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
-                    .addComponent(txtAge, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
-                    .addComponent(txtContact, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(comboCenterName, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 145, Short.MAX_VALUE)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtOfficerName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtAddress, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtPassword, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(comboCenterName, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtEmail, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtMobileNo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 846, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 852, Short.MAX_VALUE))
                 .addGap(31, 31, 31))
         );
         jPanel1Layout.setVerticalGroup(
@@ -260,32 +295,34 @@ public class ManageOfficers extends javax.swing.JFrame {
                             .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(11, 11, 11))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 551, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(comboCenterName, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtOfficerName, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtMobileNo, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(txtAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(txtAge, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(txtContact, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 551, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        txtMobileNo.getAccessibleContext().setAccessibleDescription("Mobile No");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -298,26 +335,18 @@ public class ManageOfficers extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         addOrUpdateData();
-        loaddataToTable();
+        loadDataToTable();
         clearAll();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         delete();
-        loaddataToTable();
+        loadDataToTable();
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         setEditdata();
     }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void txtSearchKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyTyped
-        try {
-            PatientsController.searchByName(txtSearch.getText().trim(), tblData);
-        } catch (SQLException ex) {
-            Logger.getLogger(ManageOfficers.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_txtSearchKeyTyped
 
     /**
      * @param args the command line arguments
@@ -360,13 +389,14 @@ public class ManageOfficers extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblData;
     private org.jdesktop.swingx.JXTextField txtAddress;
-    private org.jdesktop.swingx.JXTextField txtAge;
-    private org.jdesktop.swingx.JXTextField txtContact;
-    private org.jdesktop.swingx.JXTextField txtSearch;
+    private org.jdesktop.swingx.JXTextField txtEmail;
+    private org.jdesktop.swingx.JXTextField txtMobileNo;
+    private org.jdesktop.swingx.JXTextField txtOfficerName;
+    private org.jdesktop.swingx.JXTextField txtPassword;
     // End of variables declaration//GEN-END:variables
 }

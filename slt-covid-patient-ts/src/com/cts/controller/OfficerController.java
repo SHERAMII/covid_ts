@@ -5,6 +5,7 @@
  */
 package com.cts.controller;
 
+import com.cts.core.CommonConstants;
 import com.cts.daoimpl.OfficerDaoImpl;
 import com.cts.model.Officer;
 import java.sql.ResultSet;
@@ -40,17 +41,33 @@ public class OfficerController {
         officer.setId(id);
         return new OfficerDaoImpl().update(officer);
     }
-    
-    public static ResultSet getAll()throws SQLException{
+
+    public static ResultSet getAll() throws SQLException {
         return new OfficerDaoImpl().getAll();
     }
 
-    public static ResultSet getByOneAttribute(String attribute, String condition, String value)throws SQLException{
+    public static ResultSet getByOneAttribute(String attribute, String condition, String value) throws SQLException {
         return new OfficerDaoImpl().getByAttribute(attribute, condition, value);
     }
-    
-    public static boolean delete(int id)throws SQLException{
+
+    public static boolean delete(int id) throws SQLException {
         return new OfficerDaoImpl().delete(id);
     }
-    
+
+    public static Officer getOfficerById(int id) throws SQLException {
+        ResultSet rset = getByOneAttribute("id", CommonConstants.sql.EQUAL, Integer.toString(id));
+        Officer officer = null;
+        while (rset.next()) {
+            officer = new Officer();
+            officer.setId(rset.getInt("id"));
+            officer.setName(rset.getString("username"));
+            officer.setAddress(rset.getString("address"));
+            officer.setCenter(rset.getString("centre"));
+            officer.setMobile(rset.getString("mobile"));
+            officer.setEmail(rset.getString("email"));
+            officer.setPassword(rset.getString("password"));
+        }
+        return officer;
+    }
+
 }

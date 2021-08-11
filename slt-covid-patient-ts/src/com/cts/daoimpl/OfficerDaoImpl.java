@@ -59,7 +59,7 @@ public class OfficerDaoImpl implements OfficerDao {
         Connection con = DatabaseConnection.getDatabaseConnection();
         PreparedStatement ps = con.prepareStatement("delete from officers where id=?");
         ps.setInt(1, id);
-        ps.executeQuery();
+        ps.executeUpdate();
         ps.close();
         return true;
     }
