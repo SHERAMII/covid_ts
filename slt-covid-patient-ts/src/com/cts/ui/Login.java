@@ -25,6 +25,7 @@ public class Login extends javax.swing.JFrame {
 
         if (uname.equalsIgnoreCase("Admin") && pw.equalsIgnoreCase("123")) {
             new MainMenuV1().setVisible(true);
+            this.dispose();
         } else {
             JOptionPane.showMessageDialog(this, "Incorrect username or password !", "Warning", JOptionPane.ERROR_MESSAGE);
         }
