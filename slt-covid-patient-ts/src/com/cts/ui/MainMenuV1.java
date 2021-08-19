@@ -5,8 +5,12 @@
  */
 package com.cts.ui;
 
+import com.cts.daoimpl.PatientDaoImpl;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -24,6 +28,11 @@ public class MainMenuV1 extends javax.swing.JFrame {
         lblTimeDay.setText(Integer.toString(now.getDayOfMonth()));
         lblTimeYear.setText(Integer.toString(now.getYear()));
         lblTimeMonth.setText(now.getMonth().toString());
+        try {
+            lblPatientCount.setText(Integer.toString(new PatientDaoImpl().getAllPatientsCount()));
+        } catch (SQLException ex) {
+            Logger.getLogger(MainMenuV1.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -47,12 +56,11 @@ public class MainMenuV1 extends javax.swing.JFrame {
         jLabel10 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        jLabel12 = new javax.swing.JLabel();
-        jLabel13 = new javax.swing.JLabel();
+        lblPatientCount = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Covid Patient Management & Tracking System");
@@ -131,18 +139,6 @@ public class MainMenuV1 extends javax.swing.JFrame {
         });
         jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 130, -1, -1));
 
-        jLabel9.setBackground(new java.awt.Color(153, 153, 255));
-        jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/cts/images/_location.png"))); // NOI18N
-        jLabel9.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jLabel9.setOpaque(true);
-        jLabel9.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel9MouseClicked(evt);
-            }
-        });
-        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 130, -1, -1));
-
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(255, 255, 255));
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -150,7 +146,7 @@ public class MainMenuV1 extends javax.swing.JFrame {
         jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 270, 134, 31));
 
         jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/cts/images/_home-wall.png"))); // NOI18N
-        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 298, 560, 380));
+        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 270, 560, 380));
 
         jPanel2.setBackground(new java.awt.Color(0, 0, 153));
 
@@ -167,16 +163,15 @@ public class MainMenuV1 extends javax.swing.JFrame {
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1460, 70));
 
-        jLabel12.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel12.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel12.setText("LOCATION HISTORY");
-        jPanel1.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 270, 170, 31));
+        lblPatientCount.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        lblPatientCount.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblPatientCount.setText("0");
+        jPanel1.add(lblPatientCount, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 370, 70, 31));
 
-        jLabel13.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel13.setText("ALL PATIENTS COUNT :    00");
-        jPanel1.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 370, 250, 31));
+        jLabel14.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel14.setText("ALL PATIENTS COUNT : ");
+        jPanel1.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 370, 180, 31));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -200,10 +195,6 @@ public class MainMenuV1 extends javax.swing.JFrame {
     private void jLabel7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel7MouseClicked
         new ManagePatients().setVisible(true);
     }//GEN-LAST:event_jLabel7MouseClicked
-
-    private void jLabel9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jLabel9MouseClicked
 
     private void jLabel10MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel10MouseClicked
         new ManageCovidCenters().setVisible(true);
@@ -248,8 +239,7 @@ public class MainMenuV1 extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -257,9 +247,9 @@ public class MainMenuV1 extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JLabel lblPatientCount;
     private javax.swing.JLabel lblTimeDay;
     private javax.swing.JLabel lblTimeMonth;
     private javax.swing.JLabel lblTimeYear;

@@ -73,4 +73,15 @@ public class PatientDaoImpl implements PatientDao {
         return new CommonDaoImpl().getResultByAttribute(selectQuery, attribute, condition, value);
     }
 
+    public int getAllPatientsCount() throws SQLException {
+        Connection con = DatabaseConnection.getDatabaseConnection();
+        PreparedStatement ps = con.prepareStatement("select count(id) from patients");
+        ResultSet rset = ps.executeQuery();
+        int count = 0;
+        while (rset.next()) {
+            count = rset.getInt("count(id)");
+        }
+        return count;
+    }
+
 }

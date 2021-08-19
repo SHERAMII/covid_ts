@@ -22,7 +22,7 @@ public class DatabaseConnection {
     public static Connection getDatabaseConnection() throws SQLException {
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
-            con = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/covid_ts", "root", "1234");
+            con = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/covid_ts", "root", "");
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
             Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
