@@ -7,10 +7,7 @@ package com.cts.model;
 
 import java.math.BigDecimal;
 
-/**
- *
- * @author root_user
- */
+
 public class CovidCenter {
     private int id;
     private String centerName;

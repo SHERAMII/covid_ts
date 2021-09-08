@@ -1,13 +1,12 @@
 package com.cts.ui;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import com.cts.connection.DatabaseConnection;
+import com.mysql.jdbc.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import javax.swing.JOptionPane;
 
-/**
- *
- * @author Amal
- */
+
 public class Login extends javax.swing.JFrame {
 
     private String Language;
@@ -20,14 +19,27 @@ public class Login extends javax.swing.JFrame {
     }
 
     private void login() {
-        String uname = txtUserName.getText();
-        String pw = txtPwField.getText();
-
-        if (uname.equalsIgnoreCase("Admin") && pw.equalsIgnoreCase("123")) {
-            new MainMenuV1().setVisible(true);
-            this.dispose();
-        } else {
-            JOptionPane.showMessageDialog(this, "Incorrect username or password !", "Warning", JOptionPane.ERROR_MESSAGE);
+        try{
+         Connection con = DatabaseConnection.getDatabaseConnection();
+         String sql = "select * from officers where username=? and password=?";
+            PreparedStatement pst = con.prepareStatement (sql);
+            pst.setString(1, txtUserName.getText());
+            pst.setString(2, txtPwField.getText());
+            ResultSet rs = pst.executeQuery();
+            if(rs.next()){
+                JOptionPane.showMessageDialog(null,"username and password matched");
+                new MainMenuV1().setVisible(true);
+            }
+             else{
+                JOptionPane.showMessageDialog(null,"username and password not matched");
+                txtUserName.setText("");
+                txtPwField.setText("");
+            }
+            con.close();
+            
+        }
+        catch(Exception e){
+            JOptionPane.showMessageDialog(null, e);
         }
     }
 

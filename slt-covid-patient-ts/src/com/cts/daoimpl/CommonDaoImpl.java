@@ -14,10 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-/**
- *
- * @author Anjula
- */
+
 public class CommonDaoImpl implements CommonDao {
 
     @Override

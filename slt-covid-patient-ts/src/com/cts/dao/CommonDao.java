@@ -8,10 +8,7 @@ package com.cts.dao;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-/**
- *
- * @author root_user
- */
+
 public interface CommonDao {
 
     public ResultSet getAllRecords(String selectQuery) throws SQLException;

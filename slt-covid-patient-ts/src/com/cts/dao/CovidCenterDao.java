@@ -9,10 +9,7 @@ import com.cts.model.CovidCenter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-/**
- *
- * @author root_user
- */
+
 public interface CovidCenterDao {
 
     public boolean add(CovidCenter covidCenter) throws SQLException;

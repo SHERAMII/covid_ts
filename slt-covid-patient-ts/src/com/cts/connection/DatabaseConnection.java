@@ -11,10 +11,7 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- *
- * @author Anjula
- */
+
 public class DatabaseConnection {
 
     private static Connection con = null;

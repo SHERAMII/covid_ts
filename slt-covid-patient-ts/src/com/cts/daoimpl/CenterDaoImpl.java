@@ -13,10 +13,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-/**
- *
- * @author root_user
- */
+
 public class CenterDaoImpl implements CovidCenterDao {
 
     private String selectQuery = "select id, latitude, longitude, centre_location from quarantine_centres";

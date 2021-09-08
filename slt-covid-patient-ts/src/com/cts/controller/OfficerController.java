@@ -11,10 +11,7 @@ import com.cts.model.Officer;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-/**
- *
- * @author root_user
- */
+
 public class OfficerController {
 
     public static boolean add(String name, String address, String center,

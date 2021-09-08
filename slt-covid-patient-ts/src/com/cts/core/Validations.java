@@ -12,10 +12,7 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-/**
- *
- * @author 4m4l
- */
+
 public class Validations {
 
     @Deprecated

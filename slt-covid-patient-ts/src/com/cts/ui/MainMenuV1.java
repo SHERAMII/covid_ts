@@ -5,6 +5,7 @@
  */
 package com.cts.ui;
 
+import com.cts.daoimpl.OfficerDaoImpl;
 import com.cts.daoimpl.PatientDaoImpl;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -33,6 +34,11 @@ public class MainMenuV1 extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(MainMenuV1.class.getName()).log(Level.SEVERE, null, ex);
         }
+        try {
+            lblOfficerCount.setText(Integer.toString(new OfficerDaoImpl().getOfficerCount()));
+        } catch (SQLException ex) {
+            Logger.getLogger(MainMenuV1.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -49,7 +55,7 @@ public class MainMenuV1 extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
+        lblOfficerCount = new javax.swing.JLabel();
         lblTimeYear = new javax.swing.JLabel();
         lblTimeMonth = new javax.swing.JLabel();
         lblTimeDay = new javax.swing.JLabel();
@@ -61,6 +67,7 @@ public class MainMenuV1 extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         lblPatientCount = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Covid Patient Management & Tracking System");
@@ -86,10 +93,10 @@ public class MainMenuV1 extends javax.swing.JFrame {
         jLabel4.setText("OFFICERS");
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 270, 134, 31));
 
-        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel5.setText("ALL OFFICER COUNT :    00");
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 410, 250, 31));
+        lblOfficerCount.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        lblOfficerCount.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblOfficerCount.setText("0");
+        jPanel1.add(lblOfficerCount, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 410, 70, 31));
 
         lblTimeYear.setFont(new java.awt.Font("Tahoma", 1, 80)); // NOI18N
         lblTimeYear.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -173,6 +180,11 @@ public class MainMenuV1 extends javax.swing.JFrame {
         jLabel14.setText("ALL PATIENTS COUNT : ");
         jPanel1.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 370, 180, 31));
 
+        jLabel9.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel9.setText("ALL OFFICER COUNT :  ");
+        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 410, 170, 31));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -243,12 +255,13 @@ public class MainMenuV1 extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JLabel lblOfficerCount;
     private javax.swing.JLabel lblPatientCount;
     private javax.swing.JLabel lblTimeDay;
     private javax.swing.JLabel lblTimeMonth;

@@ -12,10 +12,6 @@ import com.cts.model.CovidCenter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-/**
- *
- * @author root_user
- */
 public class CovidCenterController {
 
     public static boolean add(String centerName, String longitude, String latitude) throws SQLException {

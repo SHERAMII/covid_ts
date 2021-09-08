@@ -13,10 +13,7 @@ import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * @author Anjula
- */
+
 public class CommonController {
 
     public static void loadDataToDetailTable(JTable table, ResultSet rst, String[] columnList, String column1,
